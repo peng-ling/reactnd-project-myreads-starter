@@ -11,11 +11,11 @@ class ListBooksContent extends Component {
         shelfs.map((shelf) => (<div key={shelf} className="list-books-content">
           <div>
             <div className="bookshelf">
-              <h2 className="bookshelf-title">Currently Reading</h2>
+              <h2 className="bookshelf-title">{shelf}</h2>
             </div>
             {
-              books.map((book) => {
-                return <BookshelfBooks key={book.id} book={book}/>
+              books.filter(books => books.shelf === shelf).map((item) => {
+                return <BookshelfBooks key={item.id} book={item}/>
               })
             }
           </div>
