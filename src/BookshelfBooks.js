@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
-import serializeForm from 'form-serialize';
-
+import propTypes from 'prop-types';
 
 class BookshelfBooks extends Component {
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const values = serializeForm(e.target, { hash: true });
-    if (this.props.onchangeShelf) {
-      this.props.onchangeShelf(values);
-    }
+  static propTypes = {
+    changeShelf: propTypes.func.isRequired,
+    book: propTypes.objectOf(propTypes.any).isRequired,
   }
-
   render() {
-    const { book ,onchangeShelf} = this.props;
+    const { book } = this.props;
+
+    this.handleSubmit = (e) => {
+      e.preventDefault();
+      const shelf = e.target.value;
+      if (this.props.changeShelf) {
+        this.props.changeShelf(book, shelf);
+      }
+    };
     return (
       <div className="bookshelf-books">
         <ol className="books-grid">
@@ -28,7 +31,7 @@ class BookshelfBooks extends Component {
                   }}
                 />
                 <div className="book-shelf-changer">
-                  <select onChange={this.handleSubmit}>
+                  <select onClick={this.handleSubmit}>
                     <option value="none" disabled="disabled">Move to...</option>
                     <option value="currentlyReading">Currently Reading</option>
                     <option value="wantToRead">Want to Read</option>

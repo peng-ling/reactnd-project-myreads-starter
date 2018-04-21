@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
-import propTypes from 'prop-types';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
 import ListBooksContent from './ListBooksContent';
 
 class BooksApp extends Component {
-  static propTypes = {
-    shelfs: propTypes.arrayOf(propTypes.string),
-    books: propTypes.arrayOf(propTypes.any),
-  }
-
   static defaultProps = {
     shelfs: ['currentlyReading',
       'wantToRead',
@@ -32,27 +26,36 @@ class BooksApp extends Component {
     });
   }
 
-  changeShelf = (books) => {
-    BooksAPI.update(books)
-      .then((books) => {
-        this.setState(currentState => ({
-          books: currentState.books,
-        }));
+  changeShelf = (books, shelf) => {
+    BooksAPI.update(books, shelf).then((books) => {
+      BooksAPI.getAll().then((books) => {
+        this.setState(() => ({ books }));
       });
+    });
   }
+
 
   /* function resultstoArray (resultsData) {
     var myArray = new Array();
   for (var key in resultsData) {
     myArray.push(resultsData[key]);
   }
-  return myArray;
+    rn myArray;
 } */
 
   render() {
     return (
       <div className="app">
-        <ListBooksContent shelfs={this.state.shelfs} books={this.state.books} />
+        <div className="list-books">
+          <div className="list-books-title">
+            <h1>MyReads</h1>
+          </div>
+          <ListBooksContent
+            shelfs={this.state.shelfs}
+            books={this.state.books}
+            changeShelf={this.changeShelf}
+          />
+        </div>
       </div>);
   }
 }
