@@ -3,6 +3,8 @@ import { Route, Link } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
 import ListBooksContent from './ListBooksContent';
+import SearchBooks from './SearchBooks'
+
 
 class BooksApp extends Component {
   static defaultProps = {
@@ -51,25 +53,39 @@ class BooksApp extends Component {
           exact
           path="/"
           render={() => (
-            <div className="list-books">
-              <div className="list-books-title">
-                <h1>MyReads</h1>
+            <div className="list-books-wrapper">
+              <div className="list-books">
+                <div className="list-books-title">
+                  <h1>MyReads</h1>
+                </div>
+                <ListBooksContent
+                  shelfs={this.state.shelfs}
+                  books={this.state.books}
+                  changeShelf={this.changeShelf}
+                />
               </div>
-              <ListBooksContent
-                shelfs={this.state.shelfs}
-                books={this.state.books}
-                changeShelf={this.changeShelf}
-              />
+              <div className="open-search">
+                <a
+                  href="/search"
+                  onClick={e => (e.preventDefault())}
+                >Add a book
+                </a>
+              </div>
             </div>
-        )}
+          )}
         />
         <Route
           path="/search"
           render={() => (
-            <div>Search</div>
+            <SearchBooks
+              shelfs={this.state.shelfs}
+              books={this.state.books}
+              changeShelf={this.changeShelf}
+            />
           )}
         />
-      </div>);
+      </div>
+    );
   }
 }
 
