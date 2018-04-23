@@ -21,6 +21,7 @@ class BooksApp extends Component {
       'wantToRead',
       'read',
     ],
+    query: '',
   }
 
   componentDidMount() {
@@ -35,6 +36,24 @@ class BooksApp extends Component {
         this.setState(() => ({ books }));
       });
     });
+  }
+
+  updateQuery = (query) => {
+    if (!query) {
+      this.setState({ query: '', books: [] })
+    } else {
+      this.setState({ query: query.trim() })
+      BooksAPI.search(query).then((books) => {
+        if (books.error) {
+          books = []
+        }
+        books.map(book =>
+          (this.props.books
+            .filter(item => item.id === book.id)
+            .map(item => book.shelf = item.shelf)));
+        this.setState({ books });
+      })
+    }
   }
 
 
@@ -67,7 +86,7 @@ class BooksApp extends Component {
               <div className="open-search">
                 <a
                   href="/search"
-                  onClick={e => (e.preventDefault())}
+                  /*onClick={e => (e.preventDefault())}*/
                 >Add a book
                 </a>
               </div>
@@ -81,6 +100,7 @@ class BooksApp extends Component {
               shelfs={this.state.shelfs}
               books={this.state.books}
               changeShelf={this.changeShelf}
+              updateQuery={this.updateQuery}
             />
           )}
         />
