@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
 import ListBooksContent from './ListBooksContent';
-import SearchBooks from './SearchBooks'
+import SearchBooks from './SearchBooks';
 
 
 class BooksApp extends Component {
@@ -27,6 +27,7 @@ class BooksApp extends Component {
 
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
+      console.log('books fresh from api', books)
       this.setState(() => ({ books }));
     });
   }
@@ -37,16 +38,17 @@ class BooksApp extends Component {
   )
 
   changeShelf = (books, shelf) => {
-    BooksAPI.update(books, shelf).then(() => {
-      BooksAPI.getAll().then(() => {
+    console.log('is it an object?', typeof books);
+    console.log(books);
+    BooksAPI.update(books, shelf).then((books) => {
+      BooksAPI.getAll().then((books) => {
         this.setState(() => ({ books }));
       });
     });
   }
 
   updateQuery = (query) => {
-    console.log('query', query);
-    const uQBooks = this.state.books
+    const uQBooks = this.state.books;
     if (query) {
       BooksAPI.search(query).then((b) => {
         if (b) {
@@ -89,7 +91,7 @@ class BooksApp extends Component {
               <div className="open-search">
                 <a
                   href="/search"
-                  /*onClick={e => (e.preventDefault())}*/
+                  /* onClick={e => (e.preventDefault())} */
                 >Add a book
                 </a>
               </div>

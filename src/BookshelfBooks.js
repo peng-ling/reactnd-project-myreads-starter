@@ -7,13 +7,13 @@ class BookshelfBooks extends Component {
     book: propTypes.objectOf(propTypes.any).isRequired,
   }
   render() {
-    const { book } = this.props;
+    const { book, changeShelf } = this.props;
 
     this.handleSubmit = (e) => {
       e.preventDefault();
       const shelf = e.target.value;
-      if (this.props.changeShelf) {
-        this.props.changeShelf(book, shelf);
+      if (changeShelf) {
+        changeShelf(book, shelf);
       }
     };
     return (
@@ -31,7 +31,7 @@ class BookshelfBooks extends Component {
                   }}
                 />
                 <div className="book-shelf-changer">
-                  <select onClick={this.handleSubmit}>
+                  <select onChange={this.handleSubmit}>
                     <option value="none" disabled="disabled">Move to...</option>
                     <option value="currentlyReading">Currently Reading</option>
                     <option value="wantToRead">Want to Read</option>
