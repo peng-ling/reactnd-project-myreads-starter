@@ -20,6 +20,7 @@ class BooksApp extends Component {
       'currentlyReading',
       'wantToRead',
       'read',
+      'none',
     ],
     query: '',
   }
@@ -30,40 +31,42 @@ class BooksApp extends Component {
     });
   }
 
+  getids = axa => (
+    axa.map(book =>
+      book.id)
+  )
+
   changeShelf = (books, shelf) => {
-    BooksAPI.update(books, shelf).then((books) => {
-      BooksAPI.getAll().then((books) => {
+    BooksAPI.update(books, shelf).then(() => {
+      BooksAPI.getAll().then(() => {
         this.setState(() => ({ books }));
       });
     });
   }
 
   updateQuery = (query) => {
-    if (!query) {
-      this.setState({ query: '', books: [] })
-    } else {
-      this.setState({ query: query.trim() })
-      BooksAPI.search(query).then((books) => {
-        if (books.error) {
-          books = []
+    console.log('query', query);
+    const uQBooks = this.state.books
+    if (query) {
+      BooksAPI.search(query).then((b) => {
+        if (b) {
+          const booksAllreadyOnShelf = uQBooks.filter(book =>
+            (this.getids(b).includes(book.id)));
+          const booksNotOnShelf = b.filter(book =>
+            (!this.getids(this.state.books).includes(book.id)));
+          booksNotOnShelf.map(book => book.shelf = 'none');
+          const allResultBooks = booksAllreadyOnShelf.concat(booksNotOnShelf);
+          this.setState(() => ({ books: allResultBooks }));
+        } else {
+          this.setState(() => ({ books: [] }));
         }
-        books.map(book =>
-          (this.props.books
-            .filter(item => item.id === book.id)
-            .map(item => book.shelf = item.shelf)));
-        this.setState({ books });
-      })
+      });
     }
   }
 
-
-  /* function resultstoArray (resultsData) {
-    var myArray = new Array();
-  for (var key in resultsData) {
-    myArray.push(resultsData[key]);
-  }
-    rn myArray;
-} */
+  /*         this.setState((currentState) => ({
+            contacts: currentState.contacts.concat([contact])
+          })) */
 
   render() {
     return (
@@ -99,6 +102,7 @@ class BooksApp extends Component {
             <SearchBooks
               shelfs={this.state.shelfs}
               books={this.state.books}
+              query={this.state.query}
               changeShelf={this.changeShelf}
               updateQuery={this.updateQuery}
             />

@@ -36,12 +36,12 @@ class BookshelfBooks extends Component {
                     <option value="currentlyReading">Currently Reading</option>
                     <option value="wantToRead">Want to Read</option>
                     <option value="read">Read</option>
-                    <option value="none">Nomne</option>
+                    <option value="none">None</option>
                   </select>
                 </div>
               </div>
               <div className="book-title">{book.title}</div>
-              <div className="book-authors">{book.authors[0]}</div>
+              <div className="book-authors">Bert</div>
             </div>
           </li>
         </ol>
