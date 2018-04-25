@@ -1,15 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import propTypes from 'prop-types';
 import ListBooksContent from './ListBooksContent';
 
-class SearchBooks extends Component {
-  /* static propTypes = {
-    changeShelf: propTypes.func.isRequired,
-    book: propTypes.objectOf(propTypes.any).isRequired,
-  } */
-  render() {
-    const { books, shelfs, changeShelf, updateQuery } = this.props;
-return (
+const SearchBooks = props => (
+
   <div className="search-books-wrapper">
     <div className="search-books">
       <div className="search-books-bar">
@@ -22,19 +16,24 @@ return (
           <input
             type="text"
             placeholder="Search by title or author"
-            onChange={e => updateQuery(e.target.value)}
+            onChange={e => props.updateQuery(e.target.value)}
           />
         </div>
       </div>
     </div>
     <ListBooksContent
-      shelfs={shelfs}
-      books={books}
-      changeShelf={changeShelf}
+      shelfs={props.shelfs}
+      books={props.books}
+      changeShelf={props.changeShelf}
     />
   </div>
-    );
-  }
-}
+);
+
+SearchBooks.propTypes = {
+  changeShelf: propTypes.func.isRequired,
+  updateQuery: propTypes.func.isRequired,
+  books: propTypes.objectOf(propTypes.any).isRequired,
+  shelfs: propTypes.arrayOf(propTypes.string).isRequired,
+};
 
 export default SearchBooks;

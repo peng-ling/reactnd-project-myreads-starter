@@ -28,7 +28,6 @@ class BooksApp extends Component {
 
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
-      console.log('books fresh from api', books)
       this.setState(() => ({ books }));
     });
   }
@@ -39,13 +38,9 @@ class BooksApp extends Component {
   )
 
   changeShelf = (books, shelf) => {
-    console.log('is it an object?', typeof books);
-    console.log(books);
     BooksAPI.update(books, shelf).then((books) => {
       BooksAPI.getAll().then((books) => {
-        console.log('shelf : ', books)
         this.setState(() => ({ books }));
-
       });
     });
   }
@@ -63,7 +58,6 @@ class BooksApp extends Component {
           const allResultBooks = booksAllreadyOnShelf.concat(booksNotOnShelf);
           this.setState(() => ({ books: allResultBooks }));
         } else {
-          console.log('Bazinga')
           this.setState(() => ({ books: [] }));
         }
       });
@@ -108,14 +102,14 @@ class BooksApp extends Component {
               <div className="list-books-title">
                 <h1>MyReads</h1>
               </div>
-                <SearchBooks
-                  shelfs={this.state.shelfs}
-                  books={this.state.books}
-                  query={this.state.query}
-                  changeShelf={this.changeShelf}
-                  updateQuery={this.updateQuery}
-                />
-          </div>
+              <SearchBooks
+                shelfs={this.state.shelfs}
+                books={this.state.books}
+                query={this.state.query}
+                changeShelf={this.changeShelf}
+                updateQuery={this.updateQuery}
+              />
+            </div>
           )}
         />
       </div>
