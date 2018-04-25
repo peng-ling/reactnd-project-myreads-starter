@@ -11,6 +11,7 @@ class BooksApp extends Component {
     shelfs: ['currentlyReading',
       'wantToRead',
       'read',
+      'none',
     ],
     books: [],
   };
@@ -42,7 +43,9 @@ class BooksApp extends Component {
     console.log(books);
     BooksAPI.update(books, shelf).then((books) => {
       BooksAPI.getAll().then((books) => {
+        console.log('shelf : ', books)
         this.setState(() => ({ books }));
+
       });
     });
   }
@@ -55,11 +58,12 @@ class BooksApp extends Component {
           const booksAllreadyOnShelf = uQBooks.filter(book =>
             (this.getids(b).includes(book.id)));
           const booksNotOnShelf = b.filter(book =>
-            (!this.getids(this.state.books).includes(book.id)));
+            (!this.getids(uQBooks).includes(book.id)));
           booksNotOnShelf.map(book => book.shelf = 'none');
           const allResultBooks = booksAllreadyOnShelf.concat(booksNotOnShelf);
           this.setState(() => ({ books: allResultBooks }));
         } else {
+          console.log('Bazinga')
           this.setState(() => ({ books: [] }));
         }
       });
@@ -91,7 +95,6 @@ class BooksApp extends Component {
               <div className="open-search">
                 <a
                   href="/search"
-                  /* onClick={e => (e.preventDefault())} */
                 >Add a book
                 </a>
               </div>
@@ -101,13 +104,18 @@ class BooksApp extends Component {
         <Route
           path="/search"
           render={() => (
-            <SearchBooks
-              shelfs={this.state.shelfs}
-              books={this.state.books}
-              query={this.state.query}
-              changeShelf={this.changeShelf}
-              updateQuery={this.updateQuery}
-            />
+            <div className="list-books">
+              <div className="list-books-title">
+                <h1>MyReads</h1>
+              </div>
+                <SearchBooks
+                  shelfs={this.state.shelfs}
+                  books={this.state.books}
+                  query={this.state.query}
+                  changeShelf={this.changeShelf}
+                  updateQuery={this.updateQuery}
+                />
+          </div>
           )}
         />
       </div>
