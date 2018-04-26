@@ -29,8 +29,8 @@ class BookshelfBooks extends Component {
                            backgroundImage: `url(${book.imageLinks !== undefined ? book.imageLinks.thumbnail: ''})` }}
                 />
                 <div className="book-shelf-changer">
-                  <select onChange={this.handleSubmit}>
-                    <option defaultValue="moveto">Move to...</option>
+                  <select value={book.shelf} onChange={this.handleSubmit}>
+                    <option value="moveto" disabled>Move to...</option>
                     <option value="currentlyReading">Currently Reading</option>
                     <option value="wantToRead">Want to Read</option>
                     <option value="read">Read</option>
