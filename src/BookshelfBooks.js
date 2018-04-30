@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 class BookshelfBooks extends Component {
   static propTypes = {
@@ -34,6 +35,9 @@ class BookshelfBooks extends Component {
                     <option value="currentlyReading">Currently Reading</option>
                     <option value="wantToRead">Want to Read</option>
                     <option value="read">Read</option>
+                    {window.location.pathname == '/search' ?
+                    <option value="none">None</option> : ''
+                    }
                   </select>
                 </div>
               </div>
@@ -42,7 +46,8 @@ class BookshelfBooks extends Component {
             </div>
           </li>
         </ol>
-      </div>);
+      </div>
+    );
   }
 }
 

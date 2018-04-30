@@ -1,6 +1,6 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import ListBooksContent from './ListBooksContent';
+import BookshelfBooks from './BookshelfBooks';
 
 const SearchBooks = props => (
 
@@ -21,11 +21,14 @@ const SearchBooks = props => (
         </div>
       </div>
     </div>
-    <ListBooksContent
-      shelfs={props.shelfs}
-      books={props.books}
-      changeShelf={props.changeShelf}
-    />
+    {
+      props.books.map(item => (
+        <BookshelfBooks
+          changeShelf={props.changeShelf}
+          key={item.id}
+          book={item}
+        />))
+    }
   </div>
 );
 
@@ -33,7 +36,6 @@ SearchBooks.propTypes = {
   changeShelf: propTypes.func.isRequired,
   updateQuery: propTypes.func.isRequired,
   books: propTypes.arrayOf(propTypes.any).isRequired,
-  shelfs: propTypes.arrayOf(propTypes.string).isRequired,
 };
 
 export default SearchBooks;

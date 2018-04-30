@@ -4,7 +4,7 @@ import BookshelfBooks from './BookshelfBooks';
 
 const ListBooksContent = props => (
   <div className="list-books-content-wraper">
-    {props.shelfs.map(shelf => (
+    {props.shelfs.filter((shelf) => shelf  !== 'none').map(shelf => (
       <div key={shelf} className="list-books-content">
         <div>
           <div className="bookshelf">
