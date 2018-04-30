@@ -38,83 +38,83 @@ class BooksApp extends Component {
   )
 
   changeShelf = (books, shelf) => {
-    BooksAPI.update(books, shelf).then((books) => {
-      BooksAPI.getAll().then((books) => {
-        this.setState(() => ({ books }));
-      });
+    BooksAPI.update(books, shelf).then(() => {
+      books.shelf = shelf;
+      this.setState(state => ({
+        books: state.books.filter(b =>
+          b.id !== books.id).concat([books])
+      }));
     });
   }
 
-  updateQuery = (query) => {
+updateQuery = (query) => {
+  if (query !== '') {
     const uQBooks = this.state.books;
-    if (query) {
-      BooksAPI.search(query).then((b) => {
-        if (b) {
-          const booksAllreadyOnShelf = uQBooks.filter(book =>
-            (this.getids(b).includes(book.id)));
-          const booksNotOnShelf = b.filter(book =>
-            (!this.getids(uQBooks).includes(book.id)));
-          booksNotOnShelf.map(book => book.shelf = 'none');
-          const allResultBooks = booksAllreadyOnShelf.concat(booksNotOnShelf);
-          this.setState(() => ({ books: allResultBooks }));
-        } else {
-          this.setState(() => ({ books: [] }));
-        }
-      });
-    }
+    BooksAPI.search(query).then((b) => {
+      if (!b.error) {
+        const booksAllreadyOnShelf = uQBooks.filter(book =>
+          (this.getids(b).includes(book.id)));
+        const booksNotOnShelf = b.filter(book =>
+          (!this.getids(uQBooks).includes(book.id)));
+        booksNotOnShelf.map(book => book.shelf = 'none');
+        const allResultBooks = booksAllreadyOnShelf.concat(booksNotOnShelf);
+        this.setState(() => ({ books: allResultBooks }));
+      } else {
+        this.setState(() => ({ books: [] }));
+      }
+    });
+  } else {
+    this.setState(() => ({ books: [] }));
   }
+}
 
-  /*         this.setState((currentState) => ({
-            contacts: currentState.contacts.concat([contact])
-          })) */
-
-  render() {
-    return (
-      <div className="app">
-        <Route
-          exact
-          path="/"
-          render={() => (
-            <div className="list-books-wrapper">
-              <div className="list-books">
-                <div className="list-books-title">
-                  <h1>MyReads</h1>
-                </div>
-                <ListBooksContent
-                  shelfs={this.state.shelfs}
-                  books={this.state.books}
-                  changeShelf={this.changeShelf}
-                />
-              </div>
-              <div className="open-search">
-                <a
-                  href="/search"
-                >Add a book
-                </a>
-              </div>
-            </div>
-          )}
-        />
-        <Route
-          path="/search"
-          render={() => (
+render() {
+  return (
+    <div className="app">
+      <Route
+        exact
+        path="/"
+        render={() => (
+          <div className="list-books-wrapper">
             <div className="list-books">
               <div className="list-books-title">
                 <h1>MyReads</h1>
               </div>
-              <SearchBooks
+              <ListBooksContent
                 shelfs={this.state.shelfs}
                 books={this.state.books}
-                query={this.state.query}
                 changeShelf={this.changeShelf}
-                updateQuery={this.updateQuery}
               />
             </div>
+            <div className="open-search">
+              <a
+                href="/search"
+              >Add a book
+              </a>
+            </div>
+          </div>
           )}
-        />
-      </div>
-    );
-  }
+       />
+      <Route
+        path="/search"
+        render={() => (
+          <div className="list-books">
+            <div className="list-books-title">
+              <h1>MyReads</h1>
+            </div>
+            <SearchBooks
+              shelfs={this.state.shelfs}
+              books={this.state.books}
+              query={this.state.query}
+              changeShelf={this.changeShelf}
+              updateQuery={this.updateQuery}
+            />
+          </div>
+          )}
+      />
+    </div>
+  );
+}
 }
 
 export default BooksApp;
